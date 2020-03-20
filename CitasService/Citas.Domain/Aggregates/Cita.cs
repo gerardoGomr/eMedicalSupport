@@ -45,6 +45,9 @@ namespace Citas.Domain.Aggregates
 
         public void EnEsperaDeAtencion()
         {
+            if (Estado != CONFIRMADA)
+                throw new DominioException("Solo es posible marca a En Espera a citas confirmadasss");
+
             _estado = EN_ESPERA_DE_ATENCION;
         }
     }
