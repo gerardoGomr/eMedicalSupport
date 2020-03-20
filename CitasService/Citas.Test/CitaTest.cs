@@ -88,5 +88,16 @@ namespace Citas.Test
             // Assert
             Assert.Equal(3, cita.Estado);
         }
+
+        [Fact(DisplayName = "Ocurre un error al marcar 'En Espera' a una cita cuando su estado no es 'Confirmada'")]
+        public void OcurreUnErrorAlMarcarCitaAEnEsperaCuandoSuEstadoNoEsConfirmada()
+        {
+            // Arrange
+            var cita = Cita.Agendar(DateTime.Now);
+
+            // Act
+            // Assert
+            Assert.Throws<DominioException>(() => cita.EnEsperaDeAtencion());
+        }
     }
 }
