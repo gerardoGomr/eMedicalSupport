@@ -8,6 +8,8 @@ namespace Citas.Domain.Aggregates
     {
         private const int AGENDADA = 1;
         private const int CONFIRMADA = 2;
+        private const int EN_ESPERA_DE_ATENCION = 3;
+
         private DateTime _fecha;
         private readonly DateTime _fechaRegistro;
         private int _estado;
@@ -40,5 +42,10 @@ namespace Citas.Domain.Aggregates
         }
 
         public bool EstaConfirmada() => Estado == CONFIRMADA;
+
+        public void EnEsperaDeAtencion()
+        {
+            _estado = EN_ESPERA_DE_ATENCION;
+        }
     }
 }

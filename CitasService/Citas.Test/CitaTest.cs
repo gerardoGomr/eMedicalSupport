@@ -83,7 +83,7 @@ namespace Citas.Test
             cita.Confirmar();
 
             // Act
-            cita.MarcarEnEspera();
+            cita.EnEsperaDeAtencion();
 
             // Assert
             Assert.Equal(3, cita.Estado);
