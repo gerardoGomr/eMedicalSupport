@@ -1,4 +1,5 @@
-﻿using Citas.Domain;
+﻿using Citas.Domain.Aggregates;
+using Citas.Domain.Exceptions;
 using System;
 using Xunit;
 
@@ -67,12 +68,11 @@ namespace Citas.Test
         {
             // Arrange
             var cita = Cita.Agendar(DateTime.Now);
-
-            // Act
             cita.Confirmar();
 
+            // Act
             // Assert
-            Assert.True(cita.EstaConfirmada());
+            Assert.Throws<DominioException>(() => cita.Confirmar());
         }
     }
 }

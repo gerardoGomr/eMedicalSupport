@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Citas.Domain.Exceptions;
+using Citas.Domain.SeedWork;
+using System;
 
-namespace Citas.Domain
+namespace Citas.Domain.Aggregates
 {
     public class Cita : Entity
     {
@@ -26,6 +28,9 @@ namespace Citas.Domain
 
         public void Confirmar()
         {
+            if (Estado != AGENDADA)
+                throw new DominioException("Solo es posible confirmar citas agendadas");
+
             _estado = CONFIRMADA;
         }
 

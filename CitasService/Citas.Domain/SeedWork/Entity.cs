@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Citas.Domain
+namespace Citas.Domain.SeedWork
 {
     public abstract class Entity
     {
