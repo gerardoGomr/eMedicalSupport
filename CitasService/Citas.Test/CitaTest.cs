@@ -6,11 +6,9 @@ namespace Citas.Test
 {
     public class CitaTest
     {
-        [Fact(DisplayName = "Debería existir Cita con Datos Mínimos")]
+        [Fact(DisplayName = "Debería existir cita con datos mínimos")]
         public void DeberiaExistirCita()
         {
-            // Arrange
-
             // Act
             var cita = Cita.Agendar(DateTime.Now);
 
@@ -18,25 +16,63 @@ namespace Citas.Test
             Assert.NotNull(cita);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Se crea una cita con estado 'Agendada'")]
         public void SeCreaUnaCitaConEstadoAgendada()
         {
+            // Act
             var cita = Cita.Agendar(DateTime.Now);
+
+            // Assert
             Assert.Equal(1, cita.Estado);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Se crea una cita con ID válido")]
         public void SeCreaUnaCitaConIDValido()
         {
+            // Act
             var cita = Cita.Agendar(DateTime.Now);
+
+            // Assert
             Assert.NotEqual(Guid.Empty, cita.Id);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Se especifica una cita con una fecha válida")]
         public void SeEspecificaUnaCitaConFechaHoraValilda()
         {
+            // Arrange
+            var fecha = DateTime.Now;
+
+            // Act
+            var cita = Cita.Agendar(fecha);
+
+            // Assert
+            Assert.Equal(fecha, cita.Fecha);
+        }
+
+        [Fact(DisplayName = "Se confirma una cita con éxito")]
+        public void SeConfirmaUnaCitaConExito()
+        {
+            // Arrange
             var cita = Cita.Agendar(DateTime.Now);
-            Assert.Equal(DateTime.Today, cita.Fecha.Date);
+
+            // Act
+            cita.Confirmar();
+
+            // Assert
+            Assert.True(cita.EstaConfirmada());
+        }
+
+        [Fact(DisplayName = "Ocurre un error al confirmar una cita cuando su estado no es 'Agendada'")]
+        public void OcurreUnErrorAlConfirmarUnaCitaCuandoSuEstadoNoEsAgendada()
+        {
+            // Arrange
+            var cita = Cita.Agendar(DateTime.Now);
+
+            // Act
+            cita.Confirmar();
+
+            // Assert
+            Assert.True(cita.EstaConfirmada());
         }
     }
 }
