@@ -74,5 +74,19 @@ namespace Citas.Test
             // Assert
             Assert.Throws<DominioException>(() => cita.Confirmar());
         }
+
+        [Fact(DisplayName = "Se marca una cita con estado 'En Espera de Atencion'")]
+        public void SeMarcaCitaEnEsperaDeAtencion()
+        {
+            // Arrange
+            var cita = Cita.Agendar(DateTime.Now);
+            cita.Confirmar();
+
+            // Act
+            cita.MarcarEnEspera();
+
+            // Assert
+            Assert.Equal(3, cita.Estado);
+        }
     }
 }

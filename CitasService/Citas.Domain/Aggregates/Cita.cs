@@ -9,12 +9,17 @@ namespace Citas.Domain.Aggregates
         private const int AGENDADA = 1;
         private const int CONFIRMADA = 2;
         private DateTime _fecha;
+        private readonly DateTime _fechaRegistro;
         private int _estado;
 
-        public int Estado { get => _estado; }
-        public DateTime Fecha { get => _fecha; }
+        public int Estado => _estado;
+        public DateTime Fecha => _fecha;
 
-        private Cita() : base() => _estado = AGENDADA;
+        private Cita() : base()
+        {
+            _estado = AGENDADA;
+            _fechaRegistro = DateTime.Now;
+        }
 
         private Cita AgendadaPara(DateTime fecha)
         {
