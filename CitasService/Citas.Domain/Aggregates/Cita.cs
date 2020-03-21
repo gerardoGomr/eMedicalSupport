@@ -12,14 +12,14 @@ namespace Citas.Domain.Aggregates
 
         private DateTime _fecha;
         private readonly DateTime _fechaRegistro;
-        private int _estado;
+        private CitaEstado _estado;
 
-        public int Estado => _estado;
+        public CitaEstado Estado => _estado;
         public DateTime Fecha => _fecha;
 
         private Cita() : base()
         {
-            _estado = AGENDADA;
+            _estado = CitaEstado.Agendada;
             _fechaRegistro = DateTime.Now;
         }
 
@@ -35,20 +35,24 @@ namespace Citas.Domain.Aggregates
 
         public void Confirmar()
         {
-            if (Estado != AGENDADA)
+            if (!Estado.Equals(CitaEstado.Agendada))
                 throw new DominioException("Solo es posible confirmar citas agendadas");
 
-            _estado = CONFIRMADA;
+            _estado = CitaEstado.Confirmada;
         }
 
-        public bool EstaConfirmada() => Estado == CONFIRMADA;
+        public bool EstaAgendada() => Estado.Equals(CitaEstado.Agendada);
+
+        public bool EstaConfirmada() => Estado.Equals(CitaEstado.Confirmada);
+
+        public bool EstaEnEsperaDeAtencion() => Estado.Equals(CitaEstado.EnEsperaDeAtencion);
 
         public void EnEsperaDeAtencion()
         {
-            if (Estado != CONFIRMADA)
+            if (!Estado.Equals(CitaEstado.Confirmada))
                 throw new DominioException("Solo es posible marca a En Espera a citas confirmadasss");
 
-            _estado = EN_ESPERA_DE_ATENCION;
+            _estado = CitaEstado.EnEsperaDeAtencion;
         }
     }
 }

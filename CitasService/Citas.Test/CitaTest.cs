@@ -24,7 +24,7 @@ namespace Citas.Test
             var cita = Cita.Agendar(DateTime.Now);
 
             // Assert
-            Assert.Equal(1, cita.Estado);
+            Assert.True(cita.EstaAgendada());
         }
 
         [Fact(DisplayName = "Se crea una cita con ID válido")]
@@ -86,7 +86,7 @@ namespace Citas.Test
             cita.EnEsperaDeAtencion();
 
             // Assert
-            Assert.Equal(3, cita.Estado);
+            Assert.True(cita.EstaEnEsperaDeAtencion());
         }
 
         [Fact(DisplayName = "Ocurre un error al marcar 'En Espera' a una cita cuando su estado no es 'Confirmada'")]
