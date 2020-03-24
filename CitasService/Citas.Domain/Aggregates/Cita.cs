@@ -6,39 +6,38 @@ namespace Citas.Domain.Aggregates
 {
     public class Cita : Entity
     {
-        private const int AGENDADA = 1;
-        private const int CONFIRMADA = 2;
-        private const int EN_ESPERA_DE_ATENCION = 3;
-
-        private DateTime _fecha;
         private readonly DateTime _fechaRegistro;
-        private CitaEstado _estado;
 
-        public CitaEstado Estado => _estado;
-        public DateTime Fecha => _fecha;
+        public CitaEstado Estado { get; private set; }
+        public DateTime Fecha { get; private set; }
+        public Paciente Paciente { get; private set; }
 
         private Cita() : base()
         {
-            _estado = CitaEstado.Agendada;
+            Estado = CitaEstado.Agendada;
             _fechaRegistro = DateTime.Now;
         }
 
-        private Cita AgendadaPara(DateTime fecha)
+        private Cita AgendadaPara(DateTime fecha, Paciente paciente)
         {
-            _fecha = fecha;
+            if (fecha.Equals(DateTime.MinValue) || fecha.Equals(DateTime.MaxValue))
+                throw new DominioException($"Debe especificar una fecha mayor o igual {DateTime.Now.ToString("dd'/'MM'/'yyyy")}");
+
+            Fecha = fecha;
+            Paciente = paciente ?? throw new DominioException("Se debe especificar un paciente a agendarle una cita");
 
             return this;
         }
 
-        public static Cita Agendar(DateTime fecha) => new Cita()
-            .AgendadaPara(fecha);
+        public static Cita Agendar(DateTime fecha, Paciente paciente) => new Cita()
+            .AgendadaPara(fecha, paciente);
 
         public void Confirmar()
         {
             if (!Estado.Equals(CitaEstado.Agendada))
                 throw new DominioException("Solo es posible confirmar citas agendadas");
 
-            _estado = CitaEstado.Confirmada;
+            Estado = CitaEstado.Confirmada;
         }
 
         public bool EstaAgendada() => Estado.Equals(CitaEstado.Agendada);
@@ -52,7 +51,7 @@ namespace Citas.Domain.Aggregates
             if (!Estado.Equals(CitaEstado.Confirmada))
                 throw new DominioException("Solo es posible marca a En Espera a citas confirmadasss");
 
-            _estado = CitaEstado.EnEsperaDeAtencion;
+            Estado = CitaEstado.EnEsperaDeAtencion;
         }
     }
 }
