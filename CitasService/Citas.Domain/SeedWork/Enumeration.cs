@@ -7,16 +7,16 @@ namespace Citas.Domain.SeedWork
 {
     public abstract class Enumeration : IComparable
     {
-        public string Name { get; private set; }
+        public string Valor { get; private set; }
         public int Id { get; private set; }
 
-        protected Enumeration(int id, string name)
+        protected Enumeration(int id, string valor)
         {
             Id = id;
-            Name = name;
+            Valor = valor;
         }
 
-        public override string ToString() => Name;
+        public override string ToString() => Valor;
 
         public static IEnumerable<T> GetAll<T>() where T : Enumeration, new()
         {
@@ -48,7 +48,7 @@ namespace Citas.Domain.SeedWork
 
         public static T FromDisplayName<T>(string displayName) where T : Enumeration, new()
         {
-            var matchingItem = Parse<T, string>(displayName, "display name", item => item.Name == displayName);
+            var matchingItem = Parse<T, string>(displayName, "display name", item => item.Valor == displayName);
             return matchingItem;
         }
 

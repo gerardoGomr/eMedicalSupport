@@ -1,5 +1,6 @@
 ﻿using Citas.Domain.Exceptions;
 using Citas.Domain.SeedWork;
+using Citas.Domain.Helpers;
 using System;
 
 namespace Citas.Domain.Aggregates
@@ -21,10 +22,10 @@ namespace Citas.Domain.Aggregates
         private Cita AgendadaPara(DateTime fecha, Paciente paciente)
         {
             if (fecha.Equals(DateTime.MinValue) || fecha.Equals(DateTime.MaxValue))
-                throw new DominioException($"Debe especificar una fecha mayor o igual {DateTime.Now.ToString("dd'/'MM'/'yyyy")}");
+                throw new DominioException(string.Format(Message.FechaValida, DateTime.Now.ToString("dd'/'MM'/'yyyy")));
 
             Fecha = fecha;
-            Paciente = paciente ?? throw new DominioException("Se debe especificar un paciente a agendarle una cita");
+            Paciente = paciente ?? throw new DominioException(Message.PacienteRequerido);
 
             return this;
         }
@@ -35,7 +36,7 @@ namespace Citas.Domain.Aggregates
         public void Confirmar()
         {
             if (!Estado.Equals(CitaEstado.Agendada))
-                throw new DominioException("Solo es posible confirmar citas agendadas");
+                throw new DominioException(Message.CitaNoAgendada);
 
             Estado = CitaEstado.Confirmada;
         }
@@ -49,7 +50,7 @@ namespace Citas.Domain.Aggregates
         public void EnEsperaDeAtencion()
         {
             if (!Estado.Equals(CitaEstado.Confirmada))
-                throw new DominioException("Solo es posible marca a En Espera a citas confirmadasss");
+                throw new DominioException(Message.CitaNoConfirmada);
 
             Estado = CitaEstado.EnEsperaDeAtencion;
         }
