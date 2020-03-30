@@ -52,3 +52,6 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
+
+# Visual Studio Code
+.vscode/
