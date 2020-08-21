@@ -22,7 +22,7 @@ namespace Citas.Domain.Aggregates
         private Cita AgendadaPara(DateTime fecha, Paciente paciente)
         {
             if (fecha.Equals(DateTime.MinValue) || fecha.Equals(DateTime.MaxValue))
-                throw new DominioException(string.Format(Message.FechaValida, DateTime.Now.ToString("dd'/'MM'/'yyyy")));
+                throw new DominioException(Message.GetMessage(Message.FechaValida, DateTime.Now.ToString("dd'/'MM'/'yyyy")));
 
             Fecha = fecha;
             Paciente = paciente ?? throw new DominioException(Message.PacienteRequerido);

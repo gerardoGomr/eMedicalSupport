@@ -7,91 +7,82 @@ namespace Citas.Test
 {
     public class CitaTest
     {
-        private readonly DateTime _fecha;
-        private readonly Cita _cita;
-
-        public CitaTest()
-        {
-            _fecha = DateTime.Now;
-            var paciente = new Paciente(new Nombre("Gerardo", "Gomez", "Ruiz"));
-            _cita = Cita.Agendar(_fecha, paciente);
-        }
-
         [Fact(DisplayName = "Debería existir cita con datos mínimos")]
-        public void DeberiaExistirCita()
+        public void DeberiaCrearseUnaCitaSiPacienteYFechaSonCorrectos()
         {
-            // Assert
-            Assert.NotNull(_cita);
-        }
+            // Arrange
+            var fecha = DateTime.Now;
+            var paciente = new Paciente(new Nombre("Gerardo", "Gomez", "Ruiz"));
 
-        [Fact(DisplayName = "Se crea una cita con estado 'Agendada'")]
-        public void SeCreaUnaCitaConEstadoAgendada()
-        {
-            // Assert
-            Assert.True(_cita.EstaAgendada());
-        }
+            // Act
+            var cita = Agendar(paciente, fecha);
 
-        [Fact(DisplayName = "Se crea una cita con ID válido")]
-        public void SeCreaUnaCitaConIDValido()
-        {
             // Assert
-            Assert.NotEqual(Guid.Empty, _cita.Id);
-        }
-
-        [Fact(DisplayName = "Se especifica una cita con una fecha válida")]
-        public void SeEspecificaUnaCitaConFechaHoraValilda()
-        {
-            // Assert
-            Assert.Equal(_fecha, _cita.Fecha);
+            Assert.NotNull(cita);
+            Assert.True(cita.EstaAgendada());
+            Assert.NotEqual(Guid.Empty, cita.Id);
+            Assert.Equal(fecha, cita.Fecha);
         }
 
         [Fact(DisplayName = "Se confirma una cita con éxito")]
         public void SeConfirmaUnaCitaConExito()
         {
+            // Arrange
+            var fecha = DateTime.Now;
+            var paciente = new Paciente(new Nombre("Gerardo", "Gomez", "Ruiz"));
+            var cita = Agendar(paciente, fecha);
+
             // Act
-            _cita.Confirmar();
+            cita.Confirmar();
 
             // Assert
-            Assert.True(_cita.EstaConfirmada());
+            Assert.True(cita.EstaConfirmada());
         }
 
         [Fact(DisplayName = "Ocurre un error al confirmar una cita cuando su estado no es 'Agendada'")]
         public void OcurreUnErrorAlConfirmarUnaCitaCuandoSuEstadoNoEsAgendada()
         {
             // Arrange
-            _cita.Confirmar();
+            var fecha = DateTime.Now;
+            var paciente = new Paciente(new Nombre("Gerardo", "Gomez", "Ruiz"));
+            var cita = Agendar(paciente, fecha);
 
             // Act
+            cita.Confirmar();
+
             // Assert
-            Assert.Throws<DominioException>(() => _cita.Confirmar());
+            Assert.Throws<DominioException>(() => cita.Confirmar());
         }
 
         [Fact(DisplayName = "Se marca una cita con estado 'En Espera de Atencion'")]
         public void SeMarcaCitaEnEsperaDeAtencion()
         {
             // Arrange
-            _cita.Confirmar();
+            var fecha = DateTime.Now;
+            var paciente = new Paciente(new Nombre("Gerardo", "Gomez", "Ruiz"));
+            var cita = Agendar(paciente, fecha);
+            cita.Confirmar();
 
             // Act
-            _cita.EnEsperaDeAtencion();
+            cita.EnEsperaDeAtencion();
 
             // Assert
-            Assert.True(_cita.EstaEnEsperaDeAtencion());
+            Assert.True(cita.EstaEnEsperaDeAtencion());
         }
 
         [Fact(DisplayName = "Ocurre un error al marcar 'En Espera' a una cita cuando su estado no es 'Confirmada'")]
         public void OcurreUnErrorAlMarcarCitaAEnEsperaCuandoSuEstadoNoEsConfirmada()
         {
+            // Arrange
+            var fecha = DateTime.Now;
+            var paciente = new Paciente(new Nombre("Gerardo", "Gomez", "Ruiz"));
+            var cita = Agendar(paciente, fecha);
+
             // Act
             // Assert
-            Assert.Throws<DominioException>(() => _cita.EnEsperaDeAtencion());
+            Assert.Throws<DominioException>(() => cita.EnEsperaDeAtencion());
         }
 
-        [Fact(DisplayName = "Se agenda cita para el paciente 'Gerardo Gomez' exitósamente")]
-        public void SeAgendaCitaParaUnPacienteExitosamente()
-        {
-            // Assert
-            Assert.NotNull(_cita.Paciente);
-        }
+        private Cita Agendar(Paciente paciente, DateTime fecha) => Cita.Agendar(fecha, paciente);
     }
 }
